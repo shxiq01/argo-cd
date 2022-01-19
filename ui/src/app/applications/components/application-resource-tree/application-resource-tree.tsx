@@ -1,4 +1,4 @@
-import {DropDown, Tooltip} from 'argo-ui';
+import { DropDown, Tooltip } from 'argo-ui';
 import * as classNames from 'classnames';
 import * as dagre from 'dagre';
 import * as React from 'react';
@@ -6,15 +6,15 @@ import Moment from 'react-moment';
 
 import * as models from '../../../shared/models';
 
-import {EmptyState} from '../../../shared/components';
-import {Consumer} from '../../../shared/context';
-import {ApplicationURLs} from '../application-urls';
-import {ResourceIcon} from '../resource-icon';
-import {ResourceLabel} from '../resource-label';
-import {BASE_COLORS, ComparisonStatusIcon, getAppOverridesCount, HealthStatusIcon, isAppNode, NodeId, nodeKey} from '../utils';
-import {NodeUpdateAnimation} from './node-update-animation';
+import { EmptyState } from '../../../shared/components';
+import { Consumer } from '../../../shared/context';
+import { ApplicationURLs } from '../application-urls';
+import { ResourceIcon } from '../resource-icon';
+import { ResourceLabel } from '../resource-label';
+import { BASE_COLORS, ComparisonStatusIcon, getAppOverridesCount, HealthStatusIcon, isAppNode, NodeId, nodeKey } from '../utils';
+import { NodeUpdateAnimation } from './node-update-animation';
 
-function treeNodeKey(node: NodeId & {uid?: string}) {
+function treeNodeKey(node: NodeId & { uid?: string }) {
     return node.uid || nodeKey(node);
 }
 
@@ -73,14 +73,14 @@ const TRAFFIC_COLORS = [0, 0.25, 0.4, 0.6]
     )
     .reduce((first, second) => first.concat(second), []);
 
-function getGraphSize(nodes: dagre.Node[]): {width: number; height: number} {
+function getGraphSize(nodes: dagre.Node[]): { width: number; height: number } {
     let width = 0;
     let height = 0;
     nodes.forEach(node => {
         width = Math.max(node.x + node.width, width);
         height = Math.max(node.y + node.height, height);
     });
-    return {width, height};
+    return { width, height };
 }
 
 function filterGraph(app: models.Application, filteredIndicatorParent: string, graph: dagre.graphlib.Graph, predicate: (node: ResourceTreeNode) => boolean) {
@@ -101,7 +101,7 @@ function filterGraph(app: models.Application, filteredIndicatorParent: string, g
         }
     });
     if (filtered) {
-        graph.setNode(FILTERED_INDICATOR_NODE, {height: NODE_HEIGHT, width: NODE_WIDTH, count: filtered, type: NODE_TYPES.filteredIndicator});
+        graph.setNode(FILTERED_INDICATOR_NODE, { height: NODE_HEIGHT, width: NODE_WIDTH, count: filtered, type: NODE_TYPES.filteredIndicator });
         graph.setEdge(filteredIndicatorParent, FILTERED_INDICATOR_NODE);
     }
 }
@@ -138,10 +138,10 @@ export function compareNodes(first: ResourceTreeNode, second: ResourceTreeNode) 
 }
 
 function appNodeKey(app: models.Application) {
-    return nodeKey({group: 'argoproj.io', kind: app.kind, name: app.metadata.name, namespace: app.metadata.namespace});
+    return nodeKey({ group: 'argoproj.io', kind: app.kind, name: app.metadata.name, namespace: app.metadata.namespace });
 }
 
-function renderFilteredNode(node: {count: number} & dagre.Node, onClearFilter: () => any) {
+function renderFilteredNode(node: { count: number } & dagre.Node, onClearFilter: () => any) {
     const indicators = new Array<number>();
     let count = Math.min(node.count - 1, 3);
     while (count > 0) {
@@ -149,7 +149,7 @@ function renderFilteredNode(node: {count: number} & dagre.Node, onClearFilter: (
     }
     return (
         <React.Fragment>
-            <div className='application-resource-tree__node' style={{left: node.x, top: node.y, width: node.width, height: node.height}}>
+            <div className='application-resource-tree__node' style={{ left: node.x, top: node.y, width: node.width, height: node.height }}>
                 <div className='application-resource-tree__node-kind-icon '>
                     <i className='icon fa fa-filter' />
                 </div>
@@ -163,7 +163,7 @@ function renderFilteredNode(node: {count: number} & dagre.Node, onClearFilter: (
                 <div
                     key={i}
                     className='application-resource-tree__node application-resource-tree__filtered-indicator'
-                    style={{left: node.x + i * 2, top: node.y + i * 2, width: node.width, height: node.height}}
+                    style={{ left: node.x + i * 2, top: node.y + i * 2, width: node.width, height: node.height }}
                 />
             ))}
         </React.Fragment>
@@ -172,15 +172,15 @@ function renderFilteredNode(node: {count: number} & dagre.Node, onClearFilter: (
 
 function renderTrafficNode(node: dagre.Node) {
     return (
-        <div style={{position: 'absolute', left: 0, top: node.y, width: node.width, height: node.height}}>
-            <div className='application-resource-tree__node-kind-icon' style={{fontSize: '2em'}}>
+        <div style={{ position: 'absolute', left: 0, top: node.y, width: node.width, height: node.height }}>
+            <div className='application-resource-tree__node-kind-icon' style={{ fontSize: '2em' }}>
                 <i className='icon fa fa-cloud' />
             </div>
         </div>
     );
 }
 
-function renderLoadBalancerNode(node: dagre.Node & {label: string; color: string}) {
+function renderLoadBalancerNode(node: dagre.Node & { label: string; color: string }) {
     return (
         <div
             className='application-resource-tree__node application-resource-tree__node--load-balancer'
@@ -191,7 +191,7 @@ function renderLoadBalancerNode(node: dagre.Node & {label: string; color: string
                 height: node.height
             }}>
             <div className='application-resource-tree__node-kind-icon'>
-                <i title={node.kind} className={`icon fa fa-network-wired`} style={{color: node.color}} />
+                <i title={node.kind} className={`icon fa fa-network-wired`} style={{ color: node.color }} />
             </div>
             <div className='application-resource-tree__node-content'>
                 <span className='application-resource-tree__node-title'>{node.label}</span>
@@ -227,7 +227,7 @@ function renderResourceNode(props: ApplicationResourceTreeProps, id: string, nod
                 'application-resource-tree__node--orphaned': node.orphaned
             })}
             title={describeNode(node)}
-            style={{left: node.x, top: node.y, width: node.width, height: node.height}}>
+            style={{ left: node.x, top: node.y, width: node.width, height: node.height }}>
             {!appNode && <NodeUpdateAnimation resourceVersion={node.resourceVersion} />}
             <div
                 className={classNames('application-resource-tree__node-kind-icon', {
@@ -235,7 +235,7 @@ function renderResourceNode(props: ApplicationResourceTreeProps, id: string, nod
                 })}>
                 <ResourceIcon kind={node.kind} />
                 <br />
-                {!rootNode && <div className='application-resource-tree__node-kind'>{ResourceLabel({kind: node.kind})}</div>}
+                {!rootNode && <div className='application-resource-tree__node-kind'>{ResourceLabel({ kind: node.kind })}</div>}
             </div>
             <div className='application-resource-tree__node-content'>
                 <span className='application-resource-tree__node-title'>{node.name}</span>
@@ -322,7 +322,7 @@ function findNetworkTargets(nodes: ResourceTreeNode[], networkingInfo: models.Re
 }
 export const ApplicationResourceTree = (props: ApplicationResourceTreeProps) => {
     const graph = new dagre.graphlib.Graph();
-    graph.setGraph({nodesep: 15, rankdir: 'LR', marginx: -100});
+    graph.setGraph({ nodesep: 15, rankdir: 'LR', marginx: -100 });
     graph.setDefaultEdgeLabel(() => ({}));
     const overridesCount = getAppOverridesCount(props.app);
     const appNode = {
@@ -338,11 +338,11 @@ export const ApplicationResourceTree = (props: ApplicationResourceTreeProps) => 
         info:
             overridesCount > 0
                 ? [
-                      {
-                          name: 'Parameter overrides',
-                          value: `${overridesCount} parameter override(s)`
-                      }
-                  ]
+                    {
+                        name: 'Parameter overrides',
+                        value: `${overridesCount} parameter override(s)`
+                    }
+                ]
                 : []
     };
 
@@ -350,11 +350,11 @@ export const ApplicationResourceTree = (props: ApplicationResourceTreeProps) => 
     props.app.status.resources.forEach(res => statusByKey.set(nodeKey(res), res));
     const nodeByKey = new Map<string, ResourceTreeNode>();
     props.tree.nodes
-        .map(node => ({...node, orphaned: false}))
-        .concat(((props.showOrphanedResources && props.tree.orphanedNodes) || []).map(node => ({...node, orphaned: true})))
+        .map(node => ({ ...node, orphaned: false }))
+        .concat(((props.showOrphanedResources && props.tree.orphanedNodes) || []).map(node => ({ ...node, orphaned: true })))
         .forEach(node => {
             const status = statusByKey.get(nodeKey(node));
-            const resourceNode: ResourceTreeNode = {...node};
+            const resourceNode: ResourceTreeNode = { ...node };
             if (status) {
                 resourceNode.health = status.health;
                 resourceNode.status = status.status;
@@ -396,7 +396,7 @@ export const ApplicationResourceTree = (props: ApplicationResourceTreeProps) => 
         sources.forEach((key, i) => colorsBySource.set(key, TRAFFIC_COLORS[i % TRAFFIC_COLORS.length]));
 
         if (externalRoots.length > 0) {
-            graph.setNode(EXTERNAL_TRAFFIC_NODE, {height: NODE_HEIGHT, width: 30, type: NODE_TYPES.externalTraffic});
+            graph.setNode(EXTERNAL_TRAFFIC_NODE, { height: NODE_HEIGHT, width: 30, type: NODE_TYPES.externalTraffic });
             externalRoots.sort(compareNodes).forEach(root => {
                 const loadBalancers = root.networkingInfo.ingress.map(ingress => ingress.hostname || ingress.ip);
                 const colorByService = new Map<string, string>();
@@ -404,10 +404,10 @@ export const ApplicationResourceTree = (props: ApplicationResourceTreeProps) => 
                 (childrenByParentKey.get(treeNodeKey(root)) || []).sort(compareNodes).forEach((child, i) => {
                     processNode(child, root, [colorByService.get(treeNodeKey(child))]);
                 });
-                graph.setNode(treeNodeKey(root), {...root, width: NODE_WIDTH, height: NODE_HEIGHT, root});
+                graph.setNode(treeNodeKey(root), { ...root, width: NODE_WIDTH, height: NODE_HEIGHT, root });
                 (childrenByParentKey.get(treeNodeKey(root)) || []).forEach(child => {
                     if (root.namespace === child.namespace) {
-                        graph.setEdge(treeNodeKey(root), treeNodeKey(child), {colors: [colorByService.get(treeNodeKey(child))]});
+                        graph.setEdge(treeNodeKey(root), treeNodeKey(child), { colors: [colorByService.get(treeNodeKey(child))] });
                     }
                 });
                 loadBalancers.forEach(key => {
@@ -419,14 +419,14 @@ export const ApplicationResourceTree = (props: ApplicationResourceTreeProps) => 
                         label: key,
                         color: colorsBySource.get(key)
                     });
-                    graph.setEdge(loadBalancerNodeKey, treeNodeKey(root), {colors: [colorsBySource.get(key)]});
-                    graph.setEdge(EXTERNAL_TRAFFIC_NODE, loadBalancerNodeKey, {colors: [colorsBySource.get(key)]});
+                    graph.setEdge(loadBalancerNodeKey, treeNodeKey(root), { colors: [colorsBySource.get(key)] });
+                    graph.setEdge(EXTERNAL_TRAFFIC_NODE, loadBalancerNodeKey, { colors: [colorsBySource.get(key)] });
                 });
             });
         }
 
         if (internalRoots.length > 0) {
-            graph.setNode(INTERNAL_TRAFFIC_NODE, {height: NODE_HEIGHT, width: 30, type: NODE_TYPES.internalTraffic});
+            graph.setNode(INTERNAL_TRAFFIC_NODE, { height: NODE_HEIGHT, width: 30, type: NODE_TYPES.internalTraffic });
             internalRoots.forEach(root => {
                 processNode(root, root, [colorsBySource.get(treeNodeKey(root))]);
                 graph.setEdge(INTERNAL_TRAFFIC_NODE, treeNodeKey(root));
@@ -462,27 +462,27 @@ export const ApplicationResourceTree = (props: ApplicationResourceTreeProps) => 
         orphans.sort(compareNodes).forEach(node => {
             processNode(node, node);
         });
-        graph.setNode(appNodeKey(props.app), {...appNode, width: NODE_WIDTH, height: NODE_HEIGHT});
+        graph.setNode(appNodeKey(props.app), { ...appNode, width: NODE_WIDTH, height: NODE_HEIGHT });
         if (props.nodeFilter) {
             filterGraph(props.app, appNodeKey(props.app), graph, props.nodeFilter);
         }
     }
 
     function processNode(node: ResourceTreeNode, root: ResourceTreeNode, colors?: string[]) {
-        graph.setNode(treeNodeKey(node), {...node, width: NODE_WIDTH, height: NODE_HEIGHT, root});
+        graph.setNode(treeNodeKey(node), { ...node, width: NODE_WIDTH, height: NODE_HEIGHT, root });
         (childrenByParentKey.get(treeNodeKey(node)) || []).sort(compareNodes).forEach(child => {
             if (treeNodeKey(child) === treeNodeKey(root)) {
                 return;
             }
             if (node.namespace === child.namespace) {
-                graph.setEdge(treeNodeKey(node), treeNodeKey(child), {colors});
+                graph.setEdge(treeNodeKey(node), treeNodeKey(child), { colors });
             }
             processNode(child, root, colors);
         });
     }
     dagre.layout(graph);
 
-    const edges: {from: string; to: string; lines: Line[]; backgroundImage?: string}[] = [];
+    const edges: { from: string; to: string; lines: Line[]; backgroundImage?: string }[] = [];
     graph.edges().forEach(edgeInfo => {
         const edge = graph.edge(edgeInfo);
         const colors = (edge.colors as string[]) || [];
@@ -502,10 +502,10 @@ export const ApplicationResourceTree = (props: ApplicationResourceTreeProps) => 
         }
         if (edge.points.length > 1) {
             for (let i = 1; i < edge.points.length; i++) {
-                lines.push({x1: edge.points[i - 1].x, y1: edge.points[i - 1].y, x2: edge.points[i].x, y2: edge.points[i].y});
+                lines.push({ x1: edge.points[i - 1].x, y1: edge.points[i - 1].y, x2: edge.points[i].x, y2: edge.points[i].y });
             }
         }
-        edges.push({from: edgeInfo.v, to: edgeInfo.w, lines, backgroundImage});
+        edges.push({ from: edgeInfo.v, to: edgeInfo.w, lines, backgroundImage });
     });
     const graphNodes = graph.nodes();
     const size = getGraphSize(graphNodes.map(id => graph.node(id)));
@@ -517,8 +517,8 @@ export const ApplicationResourceTree = (props: ApplicationResourceTreeProps) => 
             </EmptyState>
         )) || (
             <div
-                className={classNames('application-resource-tree', {'application-resource-tree--network': props.useNetworkingHierarchy})}
-                style={{width: size.width + 150, height: size.height + 250}}>
+                className={classNames('application-resource-tree', { 'application-resource-tree--network': props.useNetworkingHierarchy })}
+                style={{ width: size.width + 150, height: size.height + 350 }}>
                 {graphNodes.map(key => {
                     const node = graph.node(key);
                     const nodeType = node.type;
