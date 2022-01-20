@@ -1,40 +1,40 @@
-import {DataLoader, Page as ArgoPage, Toolbar, Utils} from 'argo-ui';
+import { Page as ArgoPage, Toolbar, Utils } from 'argo-ui';
 import * as React from 'react';
-import {BehaviorSubject, Observable} from 'rxjs';
-import {map} from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
-import {Context, ContextApis} from '../../context';
-import {services} from '../../services';
-import requests from '../../services/requests';
+import { Context, ContextApis } from '../../context';
+// import { services } from '../../services';
+// import requests from '../../services/requests';
 
-const mostRecentLoggedIn = new BehaviorSubject<boolean>(false);
+// const mostRecentLoggedIn = new BehaviorSubject<boolean>(false);
 
 import './page.scss';
 
-function isLoggedIn(): Observable<boolean> {
-    services.users.get().then(info => mostRecentLoggedIn.next(info.loggedIn));
-    return mostRecentLoggedIn;
-}
+// function isLoggedIn(): Observable<boolean> {
+//     services.users.get().then(info => mostRecentLoggedIn.next(info.loggedIn));
+//     return mostRecentLoggedIn;
+// }
 
 export const AddAuthToToolbar = (init: Toolbar | Observable<Toolbar>, ctx: ContextApis): Observable<Toolbar> => {
     return Utils.toObservable(init).pipe(
         map(toolbar => {
             toolbar = toolbar || {};
             toolbar.tools = [
-                toolbar.tools,
-                <DataLoader key='loginPanel' load={() => isLoggedIn()}>
-                    {loggedIn =>
-                        loggedIn ? (
-                            <button className='login-logout-button' key='logout' onClick={() => (window.location.href = requests.toAbsURL('/auth/logout'))}>
-                                Log out
-                            </button>
-                        ) : (
-                            <button className='login-logout-button' key='login' onClick={() => ctx.navigation.goto(`/login?return_url=${encodeURIComponent(location.href)}`)}>
-                                Log in
-                            </button>
-                        )
-                    }
-                </DataLoader>
+                toolbar.tools
+                // <DataLoader key='loginPanel' load={() => isLoggedIn()}>
+                //     {loggedIn =>
+                //         loggedIn ? (
+                //             <button className='login-logout-button' key='logout' onClick={() => (window.location.href = requests.toAbsURL('/auth/logout'))}>
+                //                 Log out
+                //             </button>
+                //         ) : (
+                //             <button className='login-logout-button' key='login' onClick={() => ctx.navigation.goto(`/login?return_url=${encodeURIComponent(location.href)}`)}>
+                //                 Log in
+                //             </button>
+                //         )
+                //     }
+                // </DataLoader>
             ];
             return toolbar;
         })

@@ -108,6 +108,7 @@ WORKDIR /go/src/github.com/argoproj/argo-cd
 COPY go.mod go.mod
 COPY go.sum go.sum
 
+RUN go env -w GOPROXY=https://goproxy.cn,direct
 RUN go mod download
 
 # Perform the build

@@ -11,7 +11,7 @@ const isProd = process.env.NODE_ENV === 'production';
 console.log(`Bundling in ${isProd ? 'production' : 'development'}...`);
 
 const proxyConf = {
-    target: process.env.ARGOCD_API_URL || 'http://localhost:8080',
+    target: process.env.ARGOCD_API_URL || 'https://172.21.9.37:30465',
     secure: false
 };
 
@@ -27,7 +27,7 @@ const config = {
 
     resolve: {
         extensions: ['.ts', '.tsx', '.js', '.json'],
-        alias: {react: require.resolve('react')}
+        alias: { react: require.resolve('react') }
     },
 
     module: {
@@ -63,7 +63,7 @@ const config = {
                 version: process.env.ARGO_VERSION || 'latest'
             })
         }),
-        new HtmlWebpackPlugin({template: 'src/app/index.html'}),
+        new HtmlWebpackPlugin({ template: 'src/app/index.html' }),
         new CopyWebpackPlugin({
             patterns: [
                 {
